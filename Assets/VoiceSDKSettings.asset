@@ -1,0 +1,850 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5356580621337969152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c2918ba0e7451694416d42d69e0944, type: 3}
+  m_Name: WitComposerData
+  m_EditorClassIdentifier: 
+  canvases: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5a46bda3295124c99b0e6537ac7252, type: 3}
+  m_Name: VoiceSDKSettings
+  m_EditorClassIdentifier: 
+  _clientAccessToken: N4JGKSPYB4PZUNGZPOIMHMXMU7EBGT6X
+  editorVersionTag: 
+  buildVersionTag: 
+  _appInfo:
+    name: therapy_demo
+    id: 994723508656833
+    lang: en
+    isPrivate: 0
+    createdAt: 2025-03-03T13:06:41-0800
+    trainingStatus: 1
+    lastTrainDuration: 80
+    lastTrainedAt: 2025-03-03T21:29:01-0800
+    nextTrainAt: 2025-03-03T21:27:41-0800
+    intents:
+    - id: 624328163640155
+      name: calibration_confirm
+      entities: []
+    - id: 1804966306933781
+      name: calibration_start
+      entities: []
+    - id: 9439946822739378
+      name: confirmation_no
+      entities: []
+    - id: 1689176965280712
+      name: confirmation_yes
+      entities: []
+    - id: 1248345143541673
+      name: emergency_stop
+      entities: []
+    - id: 9122898854497096
+      name: feedback_negative
+      entities: []
+    - id: 1027877602494640
+      name: feedback_positive
+      entities: []
+    - id: 1342213236973083
+      name: help_request
+      entities: []
+    - id: 986856386199196
+      name: therapy_end
+      entities:
+      - name: Session_Progress:Session_Progress
+        id: 880488834103084
+    - id: 984301503803138
+      name: therapy_next
+      entities: []
+    - id: 660639143071632
+      name: therapy_pause
+      entities: []
+    - id: 1037442501539654
+      name: therapy_previous
+      entities: []
+    - id: 664506656248647
+      name: therapy_repeat
+      entities: []
+    - id: 1194706595711810
+      name: therapy_resume
+      entities: []
+    - id: 2080040535742270
+      name: therapy_start
+      entities: []
+    entities:
+    - name: Assistance_Type
+      id: 3868779926745572
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Assistance_Type
+        id: 1090305446445032
+      keywords:
+      - keyword: instructions
+        synonyms:
+        - instructions
+      - keyword: modification
+        synonyms:
+        - modification
+      - keyword: repetition
+        synonyms:
+        - repetition
+      - keyword: simplification
+        synonyms:
+        - simplification
+      - keyword: technical
+        synonyms:
+        - technical
+    - name: Body_Part
+      id: 652159750537829
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Body_Part
+        id: 1842408469945909
+      keywords:
+      - keyword: arm
+        synonyms:
+        - arm
+      - keyword: back
+        synonyms:
+        - back
+      - keyword: chest
+        synonyms:
+        - chest
+      - keyword: hand
+        synonyms:
+        - hand
+      - keyword: head
+        synonyms:
+        - head
+      - keyword: leg
+        synonyms:
+        - leg
+      - keyword: neck
+        synonyms:
+        - neck
+      - keyword: shoulder
+        synonyms:
+        - shoulder
+    - name: Exercise_Type
+      id: 1303546230905886
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Exercise_Type
+        id: 1019883379984544
+      keywords:
+      - keyword: arm
+        synonyms:
+        - arm
+      - keyword: breathing
+        synonyms:
+        - breathing
+      - keyword: neck
+        synonyms:
+        - neck
+      - keyword: range_of_motion
+        synonyms:
+        - range_of_motion
+      - keyword: relaxation
+        synonyms:
+        - relaxation
+      - keyword: shoulder
+        synonyms:
+        - shoulder
+      - keyword: stretching
+        synonyms:
+        - stretching
+    - name: Intensity
+      id: 1892324731304257
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Intensity
+        id: 652321440784993
+      keywords:
+      - keyword: challenging
+        synonyms:
+        - challenging
+      - keyword: easy
+        synonyms:
+        - easy
+      - keyword: gentle
+        synonyms:
+        - gentle
+      - keyword: moderate
+        synonyms:
+        - moderate
+    - name: Pain_Level
+      id: 1840635896732951
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Pain_Level
+        id: 3047761048727203
+      keywords:
+      - keyword: mild
+        synonyms:
+        - mild
+      - keyword: moderate
+        synonyms:
+        - moderate
+      - keyword: none
+        synonyms:
+        - none
+      - keyword: severe
+        synonyms:
+        - severe
+    - name: Session_Progress
+      id: 610339962156503
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: Session_Progress
+        id: 880488834103084
+      keywords:
+      - keyword: beginning
+        synonyms:
+        - beginning
+      - keyword: current_step
+        synonyms:
+        - current_step
+      - keyword: end
+        synonyms:
+        - end
+      - keyword: middle
+        synonyms:
+        - middle
+      - keyword: specific_step
+        synonyms:
+        - specific_step
+    - name: System_Action
+      id: 4262532947313347
+      lookups:
+      - free-text
+      - keywords
+      roles:
+      - name: System_Action
+        id: 3875242046137591
+      keywords:
+      - keyword: adjust_volume
+        synonyms:
+        - adjust_volume
+      - keyword: recalibrate
+        synonyms:
+        - recalibrate
+      - keyword: reset
+        synonyms:
+        - reset
+      - keyword: slow_down
+        synonyms:
+        - slow_down
+      - keyword: speed_up
+        synonyms:
+        - speed_up
+    traits:
+    - name: Assistance_Need
+      id: 936329815377495
+      values:
+      - id: 1800677517383417
+        value: guidance
+      - id: 10054959947850694
+        value: independent
+      - id: 613807181562612
+        value: support
+    - name: Clarity
+      id: 1127494345732334
+      values:
+      - id: 1063698065274282
+        value: clear
+      - id: 523856260731349
+        value: uncertain
+    - name: Fatigue_Indicator
+      id: 2360299437680690
+      values:
+      - id: 4058185307791200
+        value: exhausted
+      - id: 1687397988857823
+        value: fresh
+      - id: 627433446543977
+        value: tired
+    - name: Sentiment
+      id: 1014655780571499
+      values:
+      - id: 1011454717526100
+        value: negative
+      - id: 1183834493269973
+        value: neutral
+      - id: 1045672034266229
+        value: positive
+    - name: Urgency_Level
+      id: 1823585025057378
+      values:
+      - id: 1357619598594171
+        value: high
+      - id: 1274364016966428
+        value: low
+      - id: 3525487361089307
+        value: medium
+    - name: Voice_Volume
+      id: 492510110391694
+      values:
+      - id: 1001487365210306
+        value: loud
+      - id: 1158186659303120
+        value: normal
+      - id: 653259810450874
+        value: soft
+    versionTags: []
+    voices:
+    - name: wit$British Butler
+      locale: en_GB
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cael
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cam
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Carl
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cartoon Baby
+      locale: en_US
+      gender: nonbinary
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cartoon Kid
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cartoon Villain
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Charlie
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cockney Accent
+      locale: en_GB
+      gender: nonbinary
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cody
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Colin
+      locale: en_CA
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Connor
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Cooper
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Disaffected
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Hollywood
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Kenyan Accent
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Overconfident
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Pirate
+      locale: en_GB
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Prospector
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Railey
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Rebecca
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Remi
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Rosie
+      locale: en_CA
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Rubie
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Southern Accent
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Surfer
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Trendy
+      locale: en_US
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Vampire
+      locale: en_US
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Whimsical
+      locale: en_GB
+      gender: female
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+    - name: wit$Wizard
+      locale: en_GB
+      gender: male
+      styles:
+      - default
+      - soft
+      - formal
+      - fast
+      - projected
+      supported_features:
+      - style
+      - pitch
+      - speed
+      - sfx
+      - viseme_events
+      - phoneme_events
+      - word_events
+  _configData:
+  - {fileID: -5356580621337969152}
+  _configurationId: f61a051e-5210-45f1-ab07-7612da4fba7c
+  _requestType: 0
+  _requestTimeoutMs: 10000
+  endpointConfiguration:
+    _uriScheme: 
+    _authority: 
+    _port: 0
+    _witApiVersion: 
+    _message: 
+    _speech: 
+    _dictation: 
+    _synthesize: 
+    _event: 
+    _converse: 
+  isDemoOnly: 0
+  useIntentAttributes: 1
+  useConduit: 1
+  _manifestLocalPath: ConduitManifest-8ccfb93a-a4b2-461a-8426-85bfbc945c57.json
+  excludedAssemblies:
+  - Oculus.Voice.Demo, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - Meta.WitAi.Samples, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  relaxedResolution: 0
