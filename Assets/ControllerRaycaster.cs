@@ -83,7 +83,7 @@ public class ControllerRaycaster : MonoBehaviour
         }
         else
         {
-            Debug.Log("Raycast missed any objects.");
+            //Debug.Log("Raycast missed any objects.");
             if (lineRenderer != null)
             {
                 lineRenderer.SetPosition(0, rayOrigin);

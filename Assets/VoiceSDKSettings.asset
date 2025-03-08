@@ -830,16 +830,16 @@ MonoBehaviour:
   _requestType: 0
   _requestTimeoutMs: 10000
   endpointConfiguration:
-    _uriScheme: 
-    _authority: 
-    _port: 0
-    _witApiVersion: 
-    _message: 
-    _speech: 
-    _dictation: 
-    _synthesize: 
-    _event: 
-    _converse: 
+    _uriScheme: https
+    _authority: api.wit.ai
+    _port: 443
+    _witApiVersion: 20240301
+    _message: message
+    _speech: speech
+    _dictation: dictation
+    _synthesize: synthesize
+    _event: event
+    _converse: converse
   isDemoOnly: 0
   useIntentAttributes: 1
   useConduit: 1

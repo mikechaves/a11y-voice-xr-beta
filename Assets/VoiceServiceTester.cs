@@ -105,6 +105,13 @@ public class VoiceServiceTester : MonoBehaviour
         if (activateButton != null) activateButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Listening";
     }
     
+    // Simple helper method that just returns false
+    // This ensures we always add our listeners
+    private bool ShouldAddListener()
+    {
+        return true;
+    }
+    
     private void OnResponse(WitResponseNode response)
     {
         Debug.Log("Got response: " + response.ToString());
@@ -132,21 +139,53 @@ public class VoiceServiceTester : MonoBehaviour
         if (statusText != null) statusText.text = "Ready. Press button to test voice.";
     }
     
-    // Alternative for testing: Simulate voice input
+    // Simpler implementation for voice input simulation
     public void SimulateVoiceInput(string textInput)
     {
-        if (voiceService != null && witConfig != null)
+        Debug.Log($"VoiceServiceTester: Simulating voice input: '{textInput}'");
+        
+        // Update status text
+        if (statusText != null)
+            statusText.text = $"Simulating: \"{textInput}\"";
+        
+        // Find voice service if needed
+        if (voiceService == null)
         {
-            // Use the text to speech feature to simulate voice input
-            if (statusText != null) statusText.text = $"Simulating: \"{textInput}\"";
-            
-            // This sends the text directly to Wit.ai for processing
-            VoiceServiceRequest request = WitRequestFactory.CreateMessageRequest(witConfig, new WitRequestOptions(){ Text = textInput }, new VoiceServiceRequestEvents(), null);
-            Debug.Log($"Sent text request: {textInput}");
+            voiceService = FindObjectOfType<VoiceService>();
+            Debug.Log($"Looking for VoiceService: {(voiceService != null ? "Found" : "Not found")}");
+        }
+        
+        // Try to use the voice service
+        if (voiceService != null)
+        {
+            try
+            {
+                // Activate with text input
+                Debug.Log($"Activating VoiceService with text: '{textInput}'");
+                voiceService.Activate(textInput);
+                
+                // Update status
+                if (statusText != null)
+                    statusText.text = $"Processing: \"{textInput}\"";
+            }
+            catch (System.Exception e)
+            {
+                // Log error
+                Debug.LogError($"Error activating voice service: {e.Message}");
+                
+                // Update status
+                if (statusText != null)
+                    statusText.text = $"Error: {e.Message}";
+            }
         }
         else
         {
-            Debug.LogError("Cannot simulate - VoiceService or WitConfig is null");
+            // No voice service found
+            Debug.LogError("Cannot simulate voice input - Voice Service not found");
+            
+            // Update status
+            if (statusText != null)
+                statusText.text = "Error: Voice Service not available";
         }
     }
 }

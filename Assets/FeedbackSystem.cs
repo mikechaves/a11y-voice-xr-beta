@@ -21,8 +21,8 @@ public class FeedbackSystem : MonoBehaviour
     [SerializeField] private AudioClip[] negativeClips;
     [SerializeField] private AudioClip[] neutralClips;
     
-    // For simple TTS implementation (would be replaced with proper TTS in final version)
-    [Header("Simple TTS")]
+    // Simple TTS settings
+    [Header("Text-to-Speech")]
     [SerializeField] private bool useTTS = true;
     [SerializeField] private float speechRate = 1.0f;
     
@@ -203,19 +203,36 @@ public class FeedbackSystem : MonoBehaviour
         activeDisplayCoroutine = null;
     }
     
-    // Simple TTS implementation
-    // Note: For a real implementation, you would integrate a proper TTS system
-    // such as the one provided by Meta Voice SDK or a third-party solution
+    // Placeholder for TTS implementation
     private void SpeakMessage(string message)
     {
-        // In a real implementation, this would call a TTS system
-        Debug.Log($"TTS would say: {message}");
+        if (!useTTS)
+            return;
+            
+        // Log that we would speak the message with the current speech rate
+        Debug.Log($"TTS would say (at rate {speechRate}): {message}");
         
-        // For MVP purposes, you could use Meta's TTS if available,
-        // or use a pre-recorded audio clip system
+        // In a real implementation, this would be connected to Meta TTS or another TTS system
+        // The speech rate would control how fast the message is spoken
+        float messageDuration = message.Length * 0.05f / speechRate; // Rough estimate of duration
         
-        // Placeholder for Meta TTS implementation:
-        // TTSService.Instance.Speak(message);
+        // In a complete implementation, we would:
+        // 1. Configure the TTS service with the speech rate
+        // 2. Convert the text to speech
+        // 3. Play the speech audio
+        
+        // For now, just simulate the "speaking" duration
+        StartCoroutine(SimulateSpeaking(messageDuration));
+    }
+    
+    // Simulate the speaking duration for feedback
+    private IEnumerator SimulateSpeaking(float duration)
+    {
+        // Simulate the speaking time
+        yield return new WaitForSeconds(duration);
+        
+        // Optionally log when speech is "complete"
+        Debug.Log("TTS speech complete");
     }
     
     // Feedback types

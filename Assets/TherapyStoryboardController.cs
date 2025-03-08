@@ -37,8 +37,8 @@ public class TherapyStoryboardController : MonoBehaviour
     private StoryboardState currentState = StoryboardState.Calibration;
     
     // For handling calibration results
-    private bool isCalibrated = false;
-    private float voiceThreshold = 0f;
+    private bool isCalibrated = false; // Tracks if user has completed voice calibration
+    private float voiceThreshold = 0.02f; // Default voice sensitivity threshold
     
     // For calibration phrases
     [Header("Calibration")]
@@ -1017,6 +1017,12 @@ public class TherapyStoryboardController : MonoBehaviour
                 // Calibration complete
                 isCalibrated = true;
                 
+                // Set calibrated voice threshold based on microphone input
+                // In a real implementation, this would use actual mic data analyzed during calibration
+                voiceThreshold = lastMicrophoneLevel * 0.8f;
+                if (voiceThreshold < 0.01f) voiceThreshold = 0.02f; // Set minimum threshold
+                Debug.Log($"Voice calibration complete. Threshold set to: {voiceThreshold}");
+                
                 // Update UI
                 if (calibrationPhraseText != null)
                 {
@@ -1025,7 +1031,7 @@ public class TherapyStoryboardController : MonoBehaviour
                 
                 if (calibrationInstructionText != null)
                 {
-                    calibrationInstructionText.text = "Your voice is now calibrated. Moving to therapy...";
+                    calibrationInstructionText.text = $"Your voice is now calibrated (threshold: {voiceThreshold:F2}). Moving to therapy...";
                 }
                 
                 // Stop microphone visualization
@@ -1128,7 +1134,7 @@ public class TherapyStoryboardController : MonoBehaviour
         microphoneVisualizationCoroutine = StartCoroutine(UpdateMicrophoneVisualization());
     }
 
-    // Coroutine to simulate microphone level changes
+    // Coroutine to update microphone level visualization
     private IEnumerator UpdateMicrophoneVisualization()
     {
         // Reset slider
@@ -1139,28 +1145,60 @@ public class TherapyStoryboardController : MonoBehaviour
         
         while (true)
         {
-            // In a real implementation, you would get the actual microphone level here
-            // For testing, we'll simulate random fluctuations
-            float randomFluctuation = UnityEngine.Random.Range(-0.1f, 0.1f);
-            lastMicrophoneLevel = Mathf.Clamp01(lastMicrophoneLevel + randomFluctuation);
+            float micLevel = 0f;
             
-            // When Wit is actively listening, show higher levels
-            if (wit != null && wit.Active)
+            // If we're calibrated, use the calibrated threshold to adjust sensitivity
+            if (isCalibrated)
             {
-                lastMicrophoneLevel = Mathf.Lerp(lastMicrophoneLevel, 0.7f, 0.3f);
+                // Get actual microphone level (or simulate it for testing)
+                float rawLevel = GetCurrentMicrophoneLevel();
+                
+                // Normalize based on calibrated threshold
+                micLevel = rawLevel / voiceThreshold;
+                micLevel = Mathf.Clamp01(micLevel);
             }
             else
             {
-                lastMicrophoneLevel = Mathf.Lerp(lastMicrophoneLevel, 0.1f, 0.3f);
+                // Not calibrated yet, use simulated values
+                float randomFluctuation = UnityEngine.Random.Range(-0.1f, 0.1f);
+                micLevel = Mathf.Clamp01(lastMicrophoneLevel + randomFluctuation);
+                
+                // When Wit is actively listening, show higher levels
+                if (wit != null && wit.Active)
+                {
+                    micLevel = Mathf.Lerp(micLevel, 0.7f, 0.3f);
+                }
+                else
+                {
+                    micLevel = Mathf.Lerp(micLevel, 0.1f, 0.3f);
+                }
             }
+            
+            // Store the latest level
+            lastMicrophoneLevel = micLevel;
             
             // Update the slider
             if (voiceLevelSlider != null)
             {
-                voiceLevelSlider.value = lastMicrophoneLevel;
+                voiceLevelSlider.value = micLevel;
             }
             
             yield return new WaitForSeconds(microphoneVisualUpdateInterval);
+        }
+    }
+    
+    // Get current microphone level (or simulate it for testing)
+    private float GetCurrentMicrophoneLevel()
+    {
+        // In a real implementation, you'd use actual microphone data
+        // For now, we'll simulate based on Wit active state
+        if (wit != null && wit.Active)
+        {
+            return UnityEngine.Random.Range(voiceThreshold * 0.8f, voiceThreshold * 1.5f);
+        }
+        else
+        {
+            return UnityEngine.Random.Range(0f, voiceThreshold * 0.5f);
         }
     }
     

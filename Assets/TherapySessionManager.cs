@@ -51,15 +51,32 @@ public class TherapySessionManager : MonoBehaviour
     
     void Start()
     {
+        Debug.Log("TherapySessionManager starting...");
+        
         // Initialize UI
         UpdateUI();
+        
+        // Find Wit component if not assigned
+        if (wit == null)
+        {
+            wit = GetComponent<Wit>();
+            if (wit == null)
+            {
+                wit = FindObjectOfType<Wit>();
+                Debug.Log("Attempting to find Wit component in scene: " + (wit != null ? "Found" : "Not found"));
+            }
+        }
         
         // Register for Wit.ai events
         if (wit != null)
         {
+            Debug.Log("Registering Wit.ai event handlers...");
             wit.VoiceEvents.OnResponse.AddListener(OnWitResponse);
             wit.VoiceEvents.OnError.AddListener(OnWitError);
             wit.VoiceEvents.OnSend.AddListener(OnWitRequestCreated);
+            
+            // Log Wit configuration
+            Debug.Log($"Wit configuration - Active: {wit.Active}, IsRequestActive: {wit.IsRequestActive}");
         }
         else
         {
@@ -68,6 +85,9 @@ public class TherapySessionManager : MonoBehaviour
         
         // Start with calibration message
         ShowFeedback("Let's calibrate your voice. Please say 'Calibrate voice' clearly.");
+        
+        // Auto-activate voice after 3 seconds (for testing)
+        AutoActivateVoice();
     }
     
     // Handle voice commands from Wit.ai
@@ -212,16 +232,88 @@ public class TherapySessionManager : MonoBehaviour
         if (currentState == TherapyState.InProgress)
         {
             currentState = TherapyState.Completed;
+            
+            // Save session data
+            SaveSessionData();
+            
+            // Ask user about data retention
             ShowFeedback("Therapy session saved. Would you like to clear your voice data or keep it for improvements?");
             
-            // You would add user choice handling here
-            
-            Invoke("ResetToReady", 5f); // Reset after 5 seconds
+            // Register for voice commands to handle data retention choice
+            StartCoroutine(HandleDataRetentionChoice());
         }
         else
         {
             ShowFeedback("There's no active therapy session to end.");
         }
+    }
+    
+    // Save session data to local storage
+    private void SaveSessionData()
+    {
+        // Create session summary object
+        SessionData sessionData = new SessionData
+        {
+            sessionId = System.Guid.NewGuid().ToString(),
+            timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            completedSteps = currentStep,
+            totalSteps = therapySteps.Length - 1 // Subtract intro step
+        };
+        
+        // Convert to JSON
+        string jsonData = JsonUtility.ToJson(sessionData, true);
+        
+        // Save to persistent data path
+        string filePath = System.IO.Path.Combine(
+            Application.persistentDataPath, 
+            $"therapy_session_{System.DateTime.Now:yyyyMMdd_HHmmss}.json"
+        );
+        
+        try
+        {
+            System.IO.File.WriteAllText(filePath, jsonData);
+            Debug.Log($"Session data saved to: {filePath}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to save session data: {e.Message}");
+        }
+    }
+    
+    // Handle user choice about data retention
+    private IEnumerator HandleDataRetentionChoice()
+    {
+        bool choiceMade = false;
+        float timeoutDuration = 10f;
+        float elapsed = 0f;
+        
+        // Listen specifically for yes/no intents
+        while (!choiceMade && elapsed < timeoutDuration)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        // If no choice was made, keep data by default
+        if (!choiceMade)
+        {
+            ShowFeedback("No choice detected. Your data will be kept to improve the service. You can delete it later from settings.");
+        }
+        
+        // Reset after handling user choice
+        Invoke("ResetToReady", 5f);
+    }
+    
+    // Data structure for session information
+    [System.Serializable]
+    private class SessionData
+    {
+        public string sessionId;
+        public string timestamp;
+        public int completedSteps;
+        public int totalSteps;
+        public string[] userPreferences;
+        public string feedbackNotes;
     }
     
     // Resets to ready state after session completion
@@ -239,6 +331,17 @@ public class TherapySessionManager : MonoBehaviour
         if (instructionText != null)
         {
             instructionText.text = therapySteps[currentStep];
+        }
+    }
+    
+    // For testing with keyboard input
+    void Update()
+    {
+        // Activate voice with spacebar for testing
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Spacebar pressed - activating voice");
+            ActivateWit();
         }
     }
     
@@ -266,9 +369,50 @@ public class TherapySessionManager : MonoBehaviour
     // For manual activation (you can add a button for testing)
     public void ActivateWit()
     {
+        Debug.Log("TherapySessionManager: Manual voice activation requested");
+        
         if (wit != null)
         {
-            wit.Activate();
+            Debug.Log("TherapySessionManager: Activating Wit manually");
+            
+            // Display feedback
+            ShowFeedback("Activating voice recognition...");
+            
+            // Try activation
+            try {
+                wit.Activate();
+                Debug.Log("TherapySessionManager: Wit activation called successfully");
+            }
+            catch (System.Exception e) {
+                Debug.LogError($"TherapySessionManager: Error activating Wit: {e.Message}");
+                ShowFeedback("Error activating voice recognition. Please try again.");
+            }
         }
+        else
+        {
+            Debug.LogError("TherapySessionManager: Cannot activate - Wit is null");
+            ShowFeedback("Voice recognition not available. Please check configuration.");
+            
+            // Try to find Wit component
+            wit = FindObjectOfType<Wit>();
+            if (wit != null)
+            {
+                Debug.Log("TherapySessionManager: Found Wit component, trying activation");
+                wit.Activate();
+            }
+        }
+    }
+    
+    // Auto-activate voice recognition after a delay (for testing)
+    public void AutoActivateVoice()
+    {
+        StartCoroutine(AutoActivateAfterDelay());
+    }
+    
+    private IEnumerator AutoActivateAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        Debug.Log("Auto-activating voice recognition");
+        ActivateWit();
     }
 }

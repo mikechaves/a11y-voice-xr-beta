@@ -1,6 +1,7 @@
 // File: VoiceActivationHandler.cs
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Meta.WitAi;
 using Meta.WitAi.Json;
@@ -34,13 +35,30 @@ public class VoiceActivationHandler : MonoBehaviour
     
     void Start()
     {
+        Debug.Log("VoiceActivationHandler initializing...");
+        
+        // Find Wit component if not assigned
+        if (wit == null)
+        {
+            wit = GetComponent<Wit>();
+            if (wit == null)
+            {
+                wit = FindObjectOfType<Wit>();
+                Debug.Log("Attempting to find Wit component in scene: " + (wit != null ? "Found" : "Not found"));
+            }
+        }
+        
         // Register for Wit.ai events
         if (wit != null)
         {
+            Debug.Log("Wit component found. Registering events...");
             wit.VoiceEvents.OnSend.AddListener((request) => OnListeningStart(request));
             wit.VoiceEvents.OnResponse.AddListener(OnListeningComplete);
             wit.VoiceEvents.OnError.AddListener(OnListeningError);
             wit.VoiceEvents.OnAborted.AddListener(OnListeningAborted);
+            
+            // Log Wit configuration
+            Debug.Log($"Wit configuration - Active: {wit.Active}, IsRequestActive: {wit.IsRequestActive}");
         }
         else
         {
@@ -186,13 +204,62 @@ public class VoiceActivationHandler : MonoBehaviour
     // For manual activation via button (useful for testing)
     public void ActivateVoiceRecognition()
     {
-        if (wit != null && !isListening)
+        Debug.Log("Attempting to activate voice recognition...");
+        
+        // Find Wit component if not assigned
+        if (wit == null)
         {
-            wit.Activate();
+            wit = FindObjectOfType<Wit>();
+            Debug.Log("Trying to find Wit component: " + (wit != null ? "Found" : "Not found"));
+        }
+        
+        if (wit != null)
+        {
+            if (!isListening)
+            {
+                Debug.Log("Activating Wit...");
+                wit.Activate();
+                
+                // Update UI in case events don't fire
+                if (statusText != null)
+                    statusText.text = "Listening...";
+                
+                if (listeningIndicator != null)
+                    listeningIndicator.SetActive(true);
+                
+                // Force a timeout in case callbacks don't work
+                StartCoroutine(ForceListeningTimeout());
+            }
+            else
+            {
+                Debug.Log("Already listening, cannot activate again");
+            }
+        }
+        else
+        {
+            Debug.LogError("Cannot activate voice - Wit component is null");
         }
     }
     
-    // For voice calibration (simple implementation)
+    // Force a timeout in case callbacks don't work
+    private IEnumerator ForceListeningTimeout()
+    {
+        yield return new WaitForSeconds(15f);
+        
+        if (isListening)
+        {
+            Debug.Log("Force-stopping listening due to timeout");
+            isListening = false;
+            
+            if (listeningIndicator != null)
+                listeningIndicator.SetActive(false);
+                
+            if (statusText != null)
+                statusText.text = "Listening timed out. Please try again.";
+        }
+    }
+    
+    // For voice calibration implementation
     public void CalibrateVoice()
     {
         if (statusText != null)
@@ -201,30 +268,60 @@ public class VoiceActivationHandler : MonoBehaviour
         StartCoroutine(PerformCalibration());
     }
     
+    private List<float> calibrationSamples = new List<float>();
+    private bool isCalibrating = false;
+    
     private IEnumerator PerformCalibration()
     {
-        // In a real implementation, you would:
-        // 1. Record audio levels for a few seconds
-        // 2. Analyze to find comfortable threshold
-        // 3. Set parameters for Wit or your voice detection
+        // Reset calibration data
+        calibrationSamples.Clear();
+        isCalibrating = true;
         
-        // Simulated calibration for MVP
-        yield return new WaitForSeconds(5f);
+        // Collect audio samples for 5 seconds
+        float calibrationTime = 5f;
+        float elapsedTime = 0f;
         
-        // Set a simulated threshold (in a real implementation, this would be calculated)
-        voiceThreshold = 0.03f;
+        while (elapsedTime < calibrationTime)
+        {
+            elapsedTime += Time.deltaTime;
+            
+            // Update UI
+            if (listeningProgress != null)
+                listeningProgress.fillAmount = elapsedTime / calibrationTime;
+                
+            yield return null;
+        }
+        
+        // Calculate threshold based on samples
+        if (calibrationSamples.Count > 0)
+        {
+            // Sort samples and find the 70th percentile for a good threshold
+            calibrationSamples.Sort();
+            int percentileIndex = Mathf.FloorToInt(calibrationSamples.Count * 0.7f);
+            voiceThreshold = calibrationSamples[percentileIndex];
+            
+            // Ensure minimum threshold and add small buffer
+            voiceThreshold = Mathf.Max(voiceThreshold, 0.01f) * 1.2f;
+        }
+        else
+        {
+            // Fallback if no samples were collected
+            voiceThreshold = 0.03f;
+        }
+        
         isCalibrated = true;
+        isCalibrating = false;
+        
+        Debug.Log($"Voice calibration complete. Threshold set to: {voiceThreshold}");
         
         if (statusText != null)
-            statusText.text = "Calibration complete! Your voice threshold is set.";
+            statusText.text = $"Calibration complete! Your voice threshold is set to {voiceThreshold:F3}";
     }
     
-    // Audio visualization (if needed)
+    // Audio processing for visualization and calibration
     private void OnAudioFilterRead(float[] data, int channels)
     {
-        if (!isListening) return;
-        
-        // Calculate volume level for visualization
+        // Calculate volume level from audio data
         float sum = 0;
         for (int i = 0; i < data.Length; i++)
         {
@@ -233,7 +330,33 @@ public class VoiceActivationHandler : MonoBehaviour
         
         float average = sum / data.Length;
         
-        // You could use this to visualize audio levels
-        // or for additional feedback during calibration
+        // If calibrating, add to samples
+        if (isCalibrating)
+        {
+            calibrationSamples.Add(average);
+        }
+        
+        // If listening, can use for visual feedback
+        if (isListening && listeningProgress != null)
+        {
+            // Visualize current audio level compared to threshold
+            float levelRatio = Mathf.Clamp01(average / voiceThreshold);
+            
+            // Update listening indicator (visual feedback)
+            if (levelRatio > 0.1f && listeningProgress != null)
+            {
+                listeningProgress.fillAmount = Mathf.Lerp(listeningProgress.fillAmount, levelRatio, Time.deltaTime * 10f);
+            }
+            
+            // Use calibration status to adjust sensitivity
+            if (isCalibrated)
+            {
+                // If we're calibrated, we can be more precise about detecting speech
+                if (levelRatio > 0.7f && statusText != null)
+                {
+                    statusText.text = "Hearing you clearly...";
+                }
+            }
+        }
     }
 }
