@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "a11y-voice-xr.sln"
+    "dotnet.defaultSolution": "a11y-voice-xr-beta-main.sln"
 }
